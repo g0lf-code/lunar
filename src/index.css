@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.userBox {
+  width: 75%;
+  text-align: center;
+  position: relative;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translate(-50%, 20%);
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.4);
+}
+
+.userBoxInput {
+  margin: 20px;
+  width: 22rem;
+  background-color: white;
+}
+
+.MuiOutlinedInput-root {
+  width: 100%;
+}
+
+.userFields {
+  display: flex;
+  margin: 0 10rem;
+  justify-content: space-between;
+  align-items: center;
+}
