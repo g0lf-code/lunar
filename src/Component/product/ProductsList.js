@@ -6,10 +6,10 @@ export default function ProductsList() {
   const [products, setProducts] = useState();
 
   async function getdata() {
-    console.log(' singh kukur');
     const data = await axios({
       method: 'get',
       url: 'http://localhost:4000/product/all_products',
+      withCredentials: true,
     });
     if (data) {
       console.log(data);
@@ -26,7 +26,7 @@ export default function ProductsList() {
       style={{
         margin: 20,
         display: 'flex',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
       }}
     >
       {products?.map((prod) => {

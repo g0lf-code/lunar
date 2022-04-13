@@ -8,8 +8,6 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
 export default function ProductCard({ id, prod, user }) {
-  console.log('called me');
-
   const navigate = useNavigate();
 
   function _onCardClick(e) {
@@ -19,13 +17,20 @@ export default function ProductCard({ id, prod, user }) {
   return (
     <Card
       key={id}
-      style={{ width: 240, margin: 10, height: 300, cursor: 'pointer' }}
+      style={{
+        width: '500px',
+        margin: 10,
+        height: '40vh',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
       onClick={(e) => _onCardClick(e)}
     >
       <CardMedia
         component="img"
         alt="user"
-        height="140"
+        height="120px"
         image="/test-product.png"
       />
       <CardContent>
@@ -38,12 +43,11 @@ export default function ProductCard({ id, prod, user }) {
           {prod?.title || user?.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {prod?.description || user?.email}
+          {prod?.description?.substring(0, 40) || user?.email}
         </Typography>
       </CardContent>
       <CardActions>
         <Button size="small">View</Button>
-        <Button size="small">Learn More</Button>
       </CardActions>
     </Card>
   );

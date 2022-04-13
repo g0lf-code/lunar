@@ -1,27 +1,28 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { Link, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddAPhotoRounded';
+
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { Fab } from '@mui/material';
 
 function Copyright(props) {
   return (
     <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
+      variant="body2"
+      color="text.secondary"
+      align="center"
       {...props}
     >
       {'Copyright © '}
-      <Link color='inherit' to='/'>
+      <Link color="inherit" to="/">
         Demo for InfoMind
       </Link>{' '}
       {new Date().getFullYear()}
@@ -34,47 +35,63 @@ const theme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const [state, useState] = React.useState({
+  const [state, setState] = React.useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     address: '',
+    file: null,
   });
 
   function _onChange(e) {
-    useState({ ...state, [e?.target?.name]: e?.target?.value });
+    setState({ ...state, [e?.target?.name]: e?.target?.value });
   }
 
-  async function SignUpUser(data) {
-    try {
-      const user = await axios({
-        method: 'post',
-        url: `http://localhost:4000/user/register`,
-        data: data,
-      });
-      return user;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  // async function SignUpUser(data) {
+  //   try {
+  //     const user = await axios({
+  //       method: 'post',
+  //       url: `http://localhost:4000/user/register`,
+  //       data: data,
+  //     });
+  //     return user;
+  //   } catch (error) {
+  //     throw new Error(error.message);
+  //   }
+  // }
+
+  const handleUploadClick = (event) => {
+    console.log(event);
+    console.log('upload trigger');
+    const file = event.target.files[0];
+    console.log(file);
+    setState({ ...state, file: file });
+    console.log(state);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const usr = await SignUpUser({
-      name: state.firstName + ' ' + state.lastName,
-      email: state.email,
-      password: state.password,
-      address: state.address,
+    const url = 'http://localhost:4000/user/signup';
+    const formData = new FormData();
+    for (let i in state) {
+      console.log(i, state[i]);
+      formData.append(i, state[i]);
+    }
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    axios.post(url, formData, config).then((response) => {
+      console.log(response);
+      if (response.status === 200) navigate('/');
     });
-    console.log(usr);
-
-    if (usr) navigate('/login');
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component='main' maxWidth='xs'>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -84,29 +101,51 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
+          <input
+            accept="image/*"
+            style={{ display: 'none' }}
+            id="contained-button-file"
+            type="file"
+            onChange={handleUploadClick}
+          />
+          {
+            <label htmlFor="contained-button-file">
+              <Fab component="span">
+                {state.file && (
+                  <img
+                    src={URL.createObjectURL(state.file)}
+                    alt="profile-pic"
+                    className="circle"
+                  />
+                )}
+                {!state.file && <AddPhotoAlternateIcon />}
+              </Fab>
+            </label>
+          }
+
+          <Typography component="h1" variant="h5" style={{ marginTop: '4vh' }}>
             Sign up
           </Typography>
-          <Box
+          <br />
+          {/* <Box
             component='form'
             noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
-          >
+          > */}
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete='given-name'
-                  name='firstName'
+                  autoComplete="given-name"
+                  name="firstName"
                   onChange={_onChange}
                   value={state.firstName}
                   required
                   fullWidth
-                  id='firstName'
-                  label='First Name'
+                  id="firstName"
+                  label="First Name"
+                  // placeholder="First Name"
                   autoFocus
                 />
               </Grid>
@@ -116,10 +155,10 @@ export default function SignUp() {
                   fullWidth
                   onChange={_onChange}
                   value={state.lastName}
-                  id='lastName'
-                  label='Last Name'
-                  name='lastName'
-                  autoComplete='family-name'
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -128,10 +167,10 @@ export default function SignUp() {
                   fullWidth
                   onChange={_onChange}
                   value={state.email}
-                  id='email'
-                  label='Email Address'
-                  name='email'
-                  autoComplete='email'
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -140,11 +179,11 @@ export default function SignUp() {
                   fullWidth
                   onChange={_onChange}
                   value={state.password}
-                  name='password'
-                  label='Password'
-                  type='password'
-                  id='password'
-                  autoComplete='new-password'
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -152,29 +191,29 @@ export default function SignUp() {
                   onChange={_onChange}
                   value={state.address}
                   fullWidth
-                  name='address'
-                  label='Address'
-                  type='text'
-                  id='address'
+                  name="address"
+                  label="Address"
+                  type="text"
+                  id="address"
                 />
               </Grid>
             </Grid>
             <Button
-              type='submit'
+              type="submit"
               fullWidth
-              variant='contained'
+              variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
             </Button>
-            <Grid container justifyContent='flex-end'>
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to='/login' variant='body2'>
+                <Link to="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
-          </Box>
+          </form>
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>

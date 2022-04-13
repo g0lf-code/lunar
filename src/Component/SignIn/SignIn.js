@@ -46,13 +46,13 @@ export default function SignIn() {
     try {
       axios.defaults.withCredentials = true;
 
-      const user = await axios({
+      const res = await axios({
         method: 'post',
         credentials: 'include',
         url: `http://localhost:4000/user/login`,
         data: data,
       });
-      return user;
+      return res?.data?.payload;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -66,7 +66,7 @@ export default function SignIn() {
     });
     console.log(usr);
 
-    // if (usr) navigate('/');
+    if (usr) navigate('/');
   };
 
   return (
